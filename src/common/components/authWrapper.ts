@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const AuthWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   max-height: 528px;
@@ -9,4 +10,8 @@ export const AuthWrapper = styled.div`
   background-color: #171717;
   border: 1px solid #313131;
   border-radius: 2px;
+  color: gray;
+  input {
+    background: none;
+  }
 `;

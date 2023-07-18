@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "App";
 import reportWebVitals from "./reportWebVitals";
+import { GlobalStyled } from "app/globalStyled";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -9,6 +10,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <App />
+    <GlobalStyled />
   </React.StrictMode>
 );
 

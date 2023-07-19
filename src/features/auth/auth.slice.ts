@@ -1,19 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "common/utils";
 import { AuthApi, LoginArgs, RegisterArgs, User } from "features/auth/auth.api";
+import { AxiosError } from "axios";
 
 const THUNK_PREFIXES = {
   REGISTER: "auth/register",
 };
 
-const register = createAppAsyncThunk<any, RegisterArgs>(THUNK_PREFIXES.REGISTER, (arg) => {
-  AuthApi.register(arg)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((res) => {
-      console.error(res);
-    });
+export interface ServerError {
+  error: string;
+  in: string;
+  isEmailValid: boolean;
+  isPassValid: boolean;
+  emailRegExp: string;
+  passwordRegExp: string;
+}
+
+const register = createAppAsyncThunk<any, RegisterArgs>(THUNK_PREFIXES.REGISTER, async (arg) => {
+  try {
+    const res = await AuthApi.register(arg);
+    console.log(res);
+  } catch (error: unknown) {
+    const e = error as AxiosError;
+    console.log(e.response?.data);
+  }
 });
 
 const login = createAppAsyncThunk<{ user: User }, LoginArgs>("auth/login", async (arg) => {

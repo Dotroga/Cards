@@ -6,6 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RegisterArgs } from "features/auth/auth.api";
 import { matchPassword, passwordValidation, validateEmail } from "features/auth/validators";
 import { Input } from "Components/Input/Input";
+import TextField from "@mui/material/TextField";
+import { styled } from "styled-components";
 
 export type RegisterType = {
   email: string;
@@ -15,7 +17,7 @@ export type RegisterType = {
 
 export const Register = () => {
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, formState } = useForm<RegisterType>({
+  const { control, register, handleSubmit, formState } = useForm<RegisterType>({
     defaultValues: {
       email: "",
       password: "",
@@ -27,19 +29,43 @@ export const Register = () => {
   const submit: SubmitHandler<RegisterArgs> = (data) => {
     dispatch(authThunks.register(data));
   };
+  console.log(errors.email?.message);
 
   return (
     <AuthWrapper>
-      <form onSubmit={handleSubmit(submit)}>
-        <Input />
-        <input {...register("email", { validate: validateEmail })} />
-        <div>{errors.email?.message}</div>
-        <input {...register("password", { validate: passwordValidation })} />
-        <div>{errors.password?.message}</div>
-        <input {...register("confirmPassword", { validate: matchPassword })} />
-        <div>{errors.confirmPassword?.message}</div>
-        <button>Send</button>
-      </form>
+      <Form onSubmit={handleSubmit(submit)}>
+        <Input
+          name={"email"}
+          register={register}
+          error={!!errors.email?.message}
+          helperText={errors.email?.message}
+          validator={validateEmail}
+        />
+        <Input
+          name={"password"}
+          register={register}
+          error={!!errors.password?.message}
+          helperText={errors.password?.message}
+          validator={passwordValidation}
+        />
+        <Input
+          name={"confirmPassword"}
+          register={register}
+          error={!!errors.confirmPassword?.message}
+          helperText={errors.confirmPassword?.message}
+          validator={matchPassword}
+        />
+        <div>
+          <button>Send</button>
+        </div>
+      </Form>
     </AuthWrapper>
   );
 };
+
+const Form = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
